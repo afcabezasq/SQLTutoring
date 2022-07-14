@@ -34,7 +34,7 @@ CREATE database operation;
 CREATE database if not exists operation;
 CREATE TABLE IF NOT EXISTS books(
     `book_id` INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    `author` INTEGER UNSIGNED,
+    `author_id` INTEGER UNSIGNED,
     `title` VARCHAR(100) NOT NULL,
     `year` INTEGER UNSIGNED NOT NULL DEFAULT 1900,
     `language` VARCHAR(2) NOT NULL DEFAULT 'es' COMMENT 'ISO 639-1 Language',
@@ -113,4 +113,94 @@ VALUES('Gabriel Garcia Marquez', 'COL');
 INSERT INTO authors
 VALUES(NULL,'Juan Gabriel Vasquez','COL');
 
+INSERT INTO authors(`name`, `nationality`)
+VALUES('Julio Cortazar', 'ARG'),
+    ('Isabel Allende','CHI'),
+    ('Octavio Paz', 'MEX'),
+    ('Juan Carlos Onetti', 'URU');
 ```
+
+### Get all elements of a table
+
+```sql
+select * from authors;
+select * from clients;
+```
+### Insert elements in clients table
+
+```sql
+INSERT INTO `clients` (client_id, name, email, birthdate,gender, active, created_at)
+VALUES 
+(1,'Maria Dolores Gomez','Maria Dolores.95983222J@random.names','1971-06-06','F',1,'2018-04-09 16:51:30'),
+(2,'Adrian Fernandez','Adrian.55818851J@random.names','1970-04-09','M',1,'2018-04-09 16:51:30'),
+(3,'Maria Luisa Marin','Maria Luisa.83726282A@random.names','1957-07-30','F',1,'2018-04-09 16:51:30'),
+(4,'Pedro Sanchez','Pedro.78522059J@random.names','1992-01-31','M',1,'2018-04-09 16:51:30');
+```
+
+### On Duplicate 
+
+```sql
+INSERT INTO `clients`(name,email,birthdate,gender,active)
+VALUES ('Pedro Sanchez','Pedro.78522059J@random.names','1992-01-31','M',0)
+ON DUPLICATE KEY UPDATE active = VALUES(active);
+```
+
+### See the query in another format
+```sql
+select * from clients where client_id = 4\G;
+```
+
+### Nested query
+
+The time cab increase rapidly
+
+```sql
+INSERT INTO books(title, author,`year`)
+VALUES(
+        'Vuelta al Lberinto de la Soledad',
+        (SELECT author_id FROM authors
+        WHERE `name`= 'Octavio Paz'
+        LIMIT 1),
+        1960
+        );
+```
+
+## Run scripts from command line
+
+To run the structure of the database:
+```bash
+mysql -u root -p < <file>
+```
+
+To run the insertion of the data:
+```bash
+mysql - root -p -D <databse-name> < <file>
+```
+
+## Selct command
+
+```sql
+SELECT <attributes> FROM <table name>
+SELECT `name`, email, gender FROM clients;
+SELECT name, email, gender FROM clients LIMIT 10;
+SELECT name, email, gender FROM clients WHERE gender = 'F'
+```
+
+### Functions
+
+```sql
+SELECT YEAR(birthdate) FROM clients;
+SELECT NOW();
+SELECT name, YEAR(NOW()) - YEAR(birthdate) as Age FROM clients limit 10;
+```
+
+### Like command
+```sql
+SELECT * FROM clients WHERE name like '%Saave';
+SELECT name, email, YEAR(NOW()) - YEAR(birthdate) as Age 
+FROM clients
+WHERE gender = 'F'
+    AND name LIKE '%Lop%';
+```
+
+## JOIN Command
