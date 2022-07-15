@@ -432,3 +432,13 @@ INSERT INTO `clients` VALUES (1,'Maria Dolores Gomez','Maria Dolores.95983222J@r
 (98,'Rosa Maria Singh','Rosa Maria.41642169W@random.names','1956-12-31','F',1,'2018-04-09 16:51:31'),
 (99,'angeles Mena','angeles.88859550Q@random.names','1987-09-22','F',1,'2018-04-09 16:51:31'),
 (100,'Jose Hidalgo','Jose.05903641R@random.names','1973-08-13','M',1,'2018-04-09 16:51:31');
+
+
+INSERT INTO transactions (book_id, client_id, type, finished) VALUES
+(12,34,'sell',1),
+(54,87,'lend',0),
+(3,14,'sell',1),
+(1,54,'sell',1),
+(12,81,'lend',1),
+(12,81,'return',1),
+(87,29,'sell',1);

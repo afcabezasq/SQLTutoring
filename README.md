@@ -204,3 +204,148 @@ WHERE gender = 'F'
 ```
 
 ## JOIN Command
+
+### Inner join
+```sql
+select * from authors where author_id > 0 and author_id <= 5;
+select * from books where author_id between 1 and 5;
+select book_id, author_id, title from books where author_id between 1 and 5;
+
+SELECT b.book_id, a.author_id, a.name, b.title
+FROM books as b
+JOIN authors as a
+    ON a.author_id = b.author_id
+WHERE a.author_id between 1 and 5;
+
+SELECT c.name, b.title,a.name ,t.type
+FROM transactions as t
+JOIN books as b
+ON t.book_id = b.book_id
+JOIN clients as c
+ON t.client_id = c.client_id
+JOIN authors as a
+ON b.author_id = a.author_id
+WHERE c.gender = 'F' 
+    and t.type = 'sell';
+
+
+SELECT c.name, b.title,a.name ,t.type
+FROM transactions as t
+JOIN books as b
+ON t.book_id = b.book_id
+JOIN clients as c
+ON t.client_id = c.client_id
+JOIN authors as a
+ON b.author_id = a.author_id
+WHERE c.gender = 'M' 
+    and t.type IN ('sell','lend');
+
+```
+
+### Left join
+
+
+```sql
+SELECT b.title, a.name, a.nationality
+FROM authors as a, books as b
+WHERE a.author_id = b.author_id
+LIMIT 10;
+
+SELECT b.title, a.name, a.nationality
+FROM books as b 
+INNER join authors as a
+    ON a.author_id = b.author_id
+    LIMIT 10;
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors as a
+JOIN books as b
+    ON b.author_id = a.author_id
+WHERE a.author_id between 1 and 5
+ORDER by a.author_id;
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors as a
+JOIN books as b
+    ON b.author_id = a.author_id
+WHERE a.author_id between 1 and 5
+ORDER by a.author_id desc;
+
+
+SELECT a.author_id, a.name, a.nationality, b.title
+FROM authors as a
+LEFT JOIN books as b
+    ON b.author_id = a.author_id
+WHERE a.author_id between 1 and 5
+ORDER by a.author_id asc;
+
+
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id) AS BooksCount -- comment--
+FROM authors as a
+LEFT JOIN books as b
+    ON b.author_id = a.author_id
+WHERE a.author_id between 1 and 5
+GROUP BY a.author_id
+ORDER BY a.author_id asc;
+```
+
+
+## Join Types
+
+### Inner Join
+
+
+![inner join](https://www.tutorialrepublic.com/lib/images/inner-join.png "Inner Join").
+
+### Left Join
+
+![Left Join](https://www.tutorialrepublic.com/lib/images/left-join.png "Left Join").
+
+### Right Join
+
+![Left Join](https://www.tutorialrepublic.com/lib/images/right-join.png "Left Join").
+
+### Full Join
+
+![Left Join](https://www.tutorialrepublic.com/lib/images/full-join.png "Left Join").
+
+### Cross Join
+![Left Join](https://www.tutorialrepublic.com/lib/images/cross-join.png "Left Join").
+
+
+### Left Excluding Join
+
+![Left Join](https://static.platzi.com/media/user_upload/BadgesMesa%20de%20trabajo%202%20copia%204-8bed8f2c-6338-491e-b81f-119027ad8a9c.jpg "Left Excluding Join").
+
+```sql
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+LEFT JOIN Tabla_B B
+ON A.pk = B.pk
+WHERE B.pk IS NULL
+```
+
+### Right Excluding Join
+
+
+![Left Join](https://static.platzi.com/media/user_upload/BadgesMesa%20de%20trabajo%202%20copia%205-abeea9a6-964f-4b52-b0a5-4f790101695a.jpg "Right Excluding Join").
+
+```sql
+SELECT <columna_1> , <columna_2>,  <columna_3> ... <columna_n>
+FROM Tabla_A A
+RIGHT JOIN Tabla_B B
+ON A.pk = B.pk
+WHERE A.pk IS NULL
+```
+
+### Outer Excluding Join
+
+![Left Join](https://static.platzi.com/media/user_upload/BadgesMesa%20de%20trabajo%202%20copia%206-fa9ef4f5-1475-4e54-8b33-ebbdfb29df29.jpg "Outer Excluding Join"). 
+
+```sql
+SELECT <select_list>
+FROM Table_A A
+FULL OUTER JOIN Table_B B
+ON A.Key = B.Key
+WHERE A.Key IS NULL OR B.Key IS NULL
+```
