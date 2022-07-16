@@ -12,7 +12,8 @@ Store the information in a reliable media.
 
 ## MySql
 
-`\! clear ` Command use to clean the console
+`\! clear ` Command use to clean the console for git bash
+`\! cls` Command use to clean the console in cmd
 
 `mysql -u root -h 127.0.0.1 -p` Connect to the console 
 
@@ -349,3 +350,64 @@ FULL OUTER JOIN Table_B B
 ON A.Key = B.Key
 WHERE A.Key IS NULL OR B.Key IS NULL
 ```
+
+
+## From question to queries
+
+1. What nationalities are there?
+
+    ```sql
+    SELECT DISTINCT nationality FROM authors;
+    SELECT DISTINCT nationality FROM authors ORDER BY nationality;
+
+    ```
+
+2. How many authors are there for each nationality?
+
+    ```sql
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    GROUP BY  nationality;
+
+
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    GROUP BY  nationality
+    ORDER BY c_authors DESC;
+
+
+    
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    GROUP BY  nationality
+    ORDER BY c_authors DESC, nationality ASC;
+
+
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    WHERE nationality IS NOT NULL
+    GROUP BY  nationality
+    ORDER BY c_authors DESC, nationality ASC;
+
+
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    WHERE nationality IS NOT NULL AND nationality NOT IN('RUS')
+    GROUP BY  nationality
+    ORDER BY c_authors DESC, nationality ASC;
+
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    WHERE nationality IS NOT NULL AND nationality NOT IN('RUS','AUT')
+    GROUP BY  nationality
+    ORDER BY c_authors DESC, nationality ASC;
+
+
+    SELECT NATIONALITY, COUNT(author_id) AS c_authors
+    FROM authors
+    WHERE nationality IS NOT NULL AND nationality IN('RUS','AUT')
+    GROUP BY  nationality
+    ORDER BY c_authors DESC, nationality ASC;
+    ```
+
+    What is the average and standard deviation  of the price of the book
