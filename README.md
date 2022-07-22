@@ -410,4 +410,104 @@ WHERE A.Key IS NULL OR B.Key IS NULL
     ORDER BY c_authors DESC, nationality ASC;
     ```
 
-    What is the average and standard deviation  of the price of the book
+    What is the average and standard deviation  of the price of the book?
+
+    ```sql
+    SELECT price FROM books ORDER BY price DESC limit 10;
+    SELECT AVG(price)
+    FROM books;
+
+    SELECT AVG(price), STDDEV(price) as std
+    FROM books;
+
+    SELECT AVG(price), STDDEV(price) as std
+    FROM books;
+
+    SELECT nationality, AVG(price) as Average,
+        STDDEV(price) as StandardDeviation
+    FROM books as b
+    JOIN authors as a
+        ON a.author_id = b.author_id
+    GROUP BY nationality;
+    ```
+
+    What is the maximum/minimum book price?
+
+    ```sql
+    SELECT MAX(price), MIN(price) 
+    FROM books;
+
+
+    SELECT a.nationality, MAX(price), MIN(price)
+    FROM books as b
+    JOIN authors AS a
+        ON a.author_id = b.author_id
+    GROUP BY nationality;
+
+    SELECT c.name, t.type, b.title, 
+        CONCAT(a.name, "(", a.nationality,")" ) as author,
+        TO_DAYS(NOW()) - TO_DAYS(t.created_at) AS ago
+    FROM transactions AS t
+    LEFT JOIN clients AS c
+        ON c.client_id = t.client_id
+    LEFT JOIN books AS b
+        ON b.book_id = t.book_id
+    LEFT JOIN authors AS a
+        ON b.author_id = a.author_id;
+    ```
+
+    ## Update and Delete
+
+    ```sql
+    DELETE FROM authors WHERE author_id = 161 limit 1;
+    ```
+
+    ```sql
+    UPDATE clients
+    set active = 0 
+    WHERE client_id = 80 LIMIT 1;
+    ```
+
+    ## Truncate
+
+    Erase table holding table structure
+    ```sql
+    TRUNCATE transactions
+    ```
+
+    ## Mesh Queries
+    ```sql
+    SELECT COUNT(book_id) FROM books;
+
+    SELECT SUM(price*copies) FROM books WHERE SELLABLE=1;
+
+    SELECT sellable, sum(price*copies) FROM books GROUP BY sellable;
+
+
+    SELECT COUNT(book_id),
+        SUM(if(year<1950,1,0)) as `<1950`,
+        SUM(if(year<1950,0,1)) as `>1950`,
+    FROM books;
+    
+    
+    SELECT COUNT(book_id),
+        SUM(if(year<1950,1,0)) as `<1950`,
+        SUM(if(year >= 1950 and year < 1990,1,0)) as `<1990`,
+        SUM(if(year >= 1990 and year < 2000,1,0)) as `<2000`,
+        sum(if(year >= 2000, 1, 0)) as `<hoy`
+
+    FROM books as b
+    JOIN authors as a
+        ON  a.author_id = b.author_id
+    WHERE
+        a.nationality is not null
+    GROUP BY nationality;
+    
+    ```
+
+
+    ## ALTER
+
+    ```sql
+    ALTER TABLE authors ADD COLUMN birthyear INTEGER DEFAULT 1930 AFTER name
+    ```
